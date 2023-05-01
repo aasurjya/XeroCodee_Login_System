@@ -1,8 +1,8 @@
-const UserModel = require();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { ReturnDocument } = require("mongodb");
-const SECRET_KEY = "NOtesapi"
+const SECRET_KEY = "NOTESAPI"
+const UserModel = require('../database/user_schema')
 
 const signup = async (req,res)=>{
     //Existing User Check
