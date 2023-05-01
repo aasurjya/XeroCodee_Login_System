@@ -30,7 +30,8 @@ const signup = async (req,res)=>{
         res.status(201).json({user:result, token:token})
 
     } catch (error) {
-        console.log(Error)
+        let a = console.log(Error)
+        console.log(a);
         res.status(500).json({message:"Something is Wrong"});
     }
 };
