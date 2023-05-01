@@ -1,6 +1,7 @@
 const UserModel = require();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { ReturnDocument } = require("mongodb");
 const SECRET_KEY = "NOtesapi"
 
 const signup = async (req,res)=>{
@@ -34,7 +35,25 @@ const signup = async (req,res)=>{
     }
 };
 
-const signin = (req, res)=>{
+const signin = async (req, res)=>{
+    //Checking Credentials if it exist
+    const {email, passsword} = req.body;
+    try {
+        const ExistingUser = await UserModel.findOne({email: email})
+        if(!ExistingUser){
+            return res.status(404).json({message: "User not found Damnnn"})
+        }
+    //
+    const matchPassword = await bcrypt.compare(passsword, ExistingUser.passsword);
+    if(!matchPassword){
+        return res.status(400).json({message: "Wrong Password ha Bhai, Yaad karle"})
+    }
+    const token = jwt.sign({email:ExistingUser.email, id: ExistingUser._id}, SECRET_KEY);
+    res.status(200).json({user: ExistingUser, token: token});
+    } catch (error) {
+        console.log("error");
+        res.status(500).json({message: "Something is Wrong"});
+    }
 
 }
 module.exports = {signup, signin};

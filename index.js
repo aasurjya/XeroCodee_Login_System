@@ -1,8 +1,22 @@
-const express = require("express");
-const { default: mongoose } = require("mongoose");
-const UserRouter = require("./routes/userRoutes");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+require('dotenv').config();
+//app
 const app = express();
-const mongoose = require(mongoose);
+// db
+mongoose
+ .connect(process.env.DATABASE,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+ .then(() => console.log('DB Connected'));
 
-app.use("/users", UserRouter)
-app.use("note")
+//middlewares
+app.use(bodyParser.json());
+app.use(cors());
+const port = process.env.PORT || 8000;
+app.listen(port, () => {
+  console.log(`Server is running on ${port}`)
+});
